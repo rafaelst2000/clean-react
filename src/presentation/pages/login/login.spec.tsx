@@ -61,15 +61,15 @@ describe('Login Component', () => {
     })
   })
 
-  // test('Should call Password Validation with correct value', () => {
-  //   const { sut, validationSpy } = makeSut()
-  //   const { getByTestId } = sut
+  test('Should call Password Validation with correct value', () => {
+    const { sut, validationSpy } = makeSut()
+    const { getByTestId } = sut
     
-  //   const passwordInput = getByTestId('password')
-  //   fireEvent.input(passwordInput, { target: { value: 'any_password' } })
+    const passwordInput = getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: 'any_password' } })
 
-  //   expect(validationSpy.input).toEqual({
-  //     password: 'any_password'
-  //   })
-  // })
+    expect(validationSpy.input).toEqual({
+      password: 'any_password'
+    })
+  })
 })
