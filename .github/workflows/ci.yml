@@ -25,4 +25,11 @@ jobs:
         run: npx eslint 'src/**'
 
       - name: Run tests
-        run: npm run test:coveralls
+        run: npm run test:ci
+
+      - name: Generate Coveralls Coverage
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          path-to-lcov: ./coverage/lcov.info
