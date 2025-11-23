@@ -55,32 +55,32 @@ const populatePasswordField = (sut: RenderResult, password = faker.internet.pass
   fireEvent.input(passwordInput, { target: { value: password } })
 }
 
-const testStatusForField = (sut: RenderResult, fieldName: string, validationError?: string):void => {
+const testStatusForField = (sut: RenderResult, fieldName: string, validationError?: string): void => {
   const { getByTestId } = sut
   const fieldStatus = getByTestId(`${fieldName}-status`)
   expect(fieldStatus.title).toBe(validationError || 'Tudo certo!')
-  testElementText(sut, `${fieldName}-status`, validationError ? '🔴': '🟢')
+  testElementText(sut, `${fieldName}-status`, validationError ? '🔴' : '🟢')
 }
 
-const testErrorWrapperChildCount = (sut: RenderResult, count: number):void => {
+const testErrorWrapperChildCount = (sut: RenderResult, count: number): void => {
   const { getByTestId } = sut
   const errorWrap = getByTestId('error-wrap')
   expect(errorWrap.childElementCount).toBe(count)
 }
 
-const testElementExists = (sut: RenderResult, fieldName: string):void => {
+const testElementExists = (sut: RenderResult, fieldName: string): void => {
   const { getByTestId } = sut
   const element = getByTestId(fieldName)
   expect(element).toBeTruthy()
 }
 
-const testElementText = (sut: RenderResult, fieldName: string, text: string):void => {
+const testElementText = (sut: RenderResult, fieldName: string, text: string): void => {
   const { getByTestId } = sut
   const element = getByTestId(fieldName)
   expect(element.textContent).toBe(text)
 }
 
-const testButtonIsDisabled = (sut: RenderResult, fieldName: string, isDisabled: boolean):void => {
+const testButtonIsDisabled = (sut: RenderResult, fieldName: string, isDisabled: boolean): void => {
   const { getByTestId } = sut
   const button = getByTestId(fieldName) as HTMLButtonElement
   expect(button.disabled).toBe(isDisabled)
@@ -95,7 +95,7 @@ describe('Login Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    
+
     testErrorWrapperChildCount(sut, 0)
     testButtonIsDisabled(sut, 'submit', true)
     testStatusForField(sut, 'email', validationError)
@@ -137,7 +137,7 @@ describe('Login Component', () => {
 
   test('Should show spinner on submit', async () => {
     const { sut } = makeSut()
-    await simulateValidSubmit(sut)    
+    await simulateValidSubmit(sut)
     testElementExists(sut, 'spinner')
   })
 

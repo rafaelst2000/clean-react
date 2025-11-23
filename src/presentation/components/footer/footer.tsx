@@ -1,10 +1,9 @@
 import React, { memo } from 'react'
 import Styles from './footer-styles.scss'
-import Logo from '@/presentation/components/logo/logo'
 
 const Footer: React.FC = () => {
   return (
-      <footer className={Styles.footer} />
+    <footer className={Styles.footer} />
   )
 }
 
