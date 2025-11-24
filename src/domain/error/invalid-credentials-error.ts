@@ -1,6 +1,6 @@
-export class InvalidCredentialsError extends Error {
+export class EmailInUseError extends Error {
   constructor () {
-    super('Credenciais inválidas')
-    this.name = 'InvalidCredentialsError'
+    super('Esse e-mail já está em uso')
+    this.name = 'EmailInUseError'
   }
 }
