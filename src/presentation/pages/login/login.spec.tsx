@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
-import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock, testButtonIsDisabled, testStatusForField, testElementText, testChildCount, populateField } from '@/presentation/test'
+import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock, testButtonIsDisabled, testStatusForField, testElementText, testChildCount, populateField, testElementExists } from '@/presentation/test'
 import { Login } from '@/presentation/pages'
 import { InvalidCredentialsError } from '@/domain/error'
 import faker from 'faker'
@@ -49,12 +49,6 @@ const simulateValidSubmit = async (sut: RenderResult, email = faker.internet.ema
   const form = getByTestId('form')
   fireEvent.submit(form)
   await waitFor(() => form)
-}
-
-const testElementExists = (sut: RenderResult, fieldName: string): void => {
-  const { getByTestId } = sut
-  const element = getByTestId(fieldName)
-  expect(element).toBeTruthy()
 }
 
 describe('Login Component', () => {
