@@ -2,10 +2,10 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
-import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock, testButtonIsDisabled, testStatusForField, testElementText, testChildCount } from '@/presentation/test'
-import faker from 'faker'
+import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock, testButtonIsDisabled, testStatusForField, testElementText, testChildCount, populateField } from '@/presentation/test'
 import { Login } from '@/presentation/pages'
 import { InvalidCredentialsError } from '@/domain/error'
+import faker from 'faker'
 
 type SutTypes = {
   sut: RenderResult
@@ -20,10 +20,10 @@ type SutParams = {
 const history = createMemoryHistory({ initialEntries: ['/login'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
+  validationStub.errorMessage = params?.validationError
   const authenticationSpy = new AuthenticationSpy()
   const saveAccessTokenMock = new SaveAccessTokenMock()
 
-  validationStub.errorMessage = params?.validationError
 
   const sut = render(
     <Router history={history}>
@@ -44,17 +44,11 @@ const makeSut = (params?: SutParams): SutTypes => {
 
 const simulateValidSubmit = async (sut: RenderResult, email = faker.internet.email(), password = faker.internet.password()): Promise<void> => {
   const { getByTestId } = sut
-  populateEmailField(sut, email)
+  populateField(sut, 'email', email)
   populatePasswordField(sut, password)
   const form = getByTestId('form')
   fireEvent.submit(form)
   await waitFor(() => form)
-}
-
-const populateEmailField = (sut: RenderResult, email = faker.internet.email()): void => {
-  const { getByTestId } = sut
-  const emailInput = getByTestId('email')
-  fireEvent.input(emailInput, { target: { value: email } })
 }
 
 const populatePasswordField = (sut: RenderResult, password = faker.internet.password()): void => {
@@ -85,7 +79,7 @@ describe('Login Component', () => {
   test('Should show Email Error if Validation fails', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    populateEmailField(sut)
+    populateField(sut, 'email')
     testStatusForField(sut, 'email', validationError)
   })
 
@@ -98,7 +92,7 @@ describe('Login Component', () => {
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut } = makeSut()
-    populateEmailField(sut)
+    populateField(sut, 'email')
     testStatusForField(sut, 'email')
   })
 
@@ -110,7 +104,7 @@ describe('Login Component', () => {
 
   test('Should enable submit button if form is valid', () => {
     const { sut } = makeSut()
-    populateEmailField(sut)
+    populateField(sut, 'email')
     populatePasswordField(sut)
     testButtonIsDisabled(sut, 'submit', false)
   })
