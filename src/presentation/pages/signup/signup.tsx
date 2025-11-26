@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Styles from './signup-styles.scss'
 import { Footer, Input, LoginHeader, FormStatus } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'
-import { AddAccount } from '@/domain/usecases'
+import { AddAccount, SaveAccessToken } from '@/domain/usecases'
 
 type Props = {
   validation: Validation
   addAccount: AddAccount
+  saveAccessToken: SaveAccessToken
 }
 
-const Signup: React.FC<Props> = ({ validation, addAccount }: Props) => {
+const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Props) => {
+  const history = useHistory()
   const [state, setState] = useState({
     isLoading: false,
     email: '',
@@ -42,12 +44,14 @@ const Signup: React.FC<Props> = ({ validation, addAccount }: Props) => {
       if (state.isLoading || state.emailError || state.passwordError || state.passwordConfirmationError || state.nameError) return
      
       setState({ ...state, isLoading: true })
-      await addAccount.add({
+      const account = await addAccount.add({
         name: state.name,
         email: state.email,
         password: state.password,
         passwordConfirmation: state.passwordConfirmation
       })
+      await saveAccessToken.save(account.accessToken)
+      history.replace('/')
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message })
     }
