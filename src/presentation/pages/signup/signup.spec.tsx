@@ -43,4 +43,49 @@ describe('Signup Component', () => {
     populateField(sut, 'name')
     testStatusForField(sut, 'name', validationError)
   })
+
+  test('Should show Email Error if Validation fails', () => {
+    const validationError = faker.internet.email()
+    const { sut } = makeSut({ validationError })
+    populateField(sut, 'email')
+    testStatusForField(sut, 'email', validationError)
+  })
+
+  test('Should show Password Error if Validation fails', () => {
+    const validationError = faker.internet.password()
+    const { sut } = makeSut({ validationError })
+    populateField(sut, 'password')
+    testStatusForField(sut, 'password', validationError)
+  })
+
+  test('Should show PasswordConfirmation Error if Validation fails', () => {
+    const validationError = faker.internet.password()
+    const { sut } = makeSut({ validationError })
+    populateField(sut, 'passwordConfirmation')
+    testStatusForField(sut, 'passwordConfirmation', validationError)
+  })
+
+  test('Should show valid name state if Validation succeeds', () => {
+    const { sut } = makeSut()
+    populateField(sut, 'name')
+    testStatusForField(sut, 'name')
+  })
+
+  test('Should show valid email state if Validation succeeds', () => {
+    const { sut } = makeSut()
+    populateField(sut, 'email')
+    testStatusForField(sut, 'email')
+  })
+
+  test('Should show valid password state if Validation succeeds', () => {
+    const { sut } = makeSut()
+    populateField(sut, 'password')
+    testStatusForField(sut, 'password')
+  })
+
+  test('Should show valid password confirmation state if Validation succeeds', () => {
+    const { sut } = makeSut()
+    populateField(sut, 'password')
+    testStatusForField(sut, 'password')
+  })
 })
