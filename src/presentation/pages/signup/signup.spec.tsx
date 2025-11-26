@@ -1,13 +1,16 @@
 import React from 'react'
 import Signup from './signup'
 import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
-import { AddAccountSpy, populateField, testButtonIsDisabled, testChildCount, testElementExists, testElementText, testStatusForField, ValidationStub } from '@/presentation/test'
+import { AddAccountSpy, populateField, SaveAccessTokenMock, testButtonIsDisabled, testChildCount, testElementExists, testElementText, testStatusForField, ValidationStub } from '@/presentation/test'
 import faker from 'faker'
 import { EmailInUseError } from '@/domain/error'
+import { createMemoryHistory } from 'history'
+import { Router } from 'react-router-dom'
 
 type SutTypes = {
   sut: RenderResult
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 type SutParams = {
@@ -24,20 +27,24 @@ const simulateValidSubmit = async (sut: RenderResult, name = faker.name.findName
   fireEvent.submit(form)
   await waitFor(() => form)
 }
-
+const history = createMemoryHistory({ initialEntries: ['/signup'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
 
   const addAccountSpy = new AddAccountSpy()
+  const saveAccessTokenMock = new SaveAccessTokenMock()
   const sut = render(
-    <Signup
-      validation={validationStub}
-      addAccount={addAccountSpy}
-    />
+    <Router history={history}>
+      <Signup
+        validation={validationStub}
+        addAccount={addAccountSpy}
+        saveAccessToken={saveAccessTokenMock}
+      />
+    </Router>
   )
 
-  return { sut, addAccountSpy }
+  return { sut, addAccountSpy, saveAccessTokenMock }
 }
 
 describe('Signup Component', () => {
@@ -154,5 +161,13 @@ describe('Signup Component', () => {
 
     testElementText(sut, 'main-error', error.message)
     testChildCount(sut, 'error-wrap', 1)
+  })
+
+  test('Should call SaveAccessToken on success', async () => {
+    const { sut, addAccountSpy, saveAccessTokenMock } = makeSut()
+    await simulateValidSubmit(sut)
+    expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
+    expect(history.length).toBe(1)
+    expect(history.location.pathname).toBe('/')
   })
 })
