@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
-import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock } from '@/presentation/test'
+import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock, testButtonIsDisabled, testStatusForField, testElementText, testChildCount } from '@/presentation/test'
 import faker from 'faker'
 import { Login } from '@/presentation/pages'
 import { InvalidCredentialsError } from '@/domain/error'
@@ -63,35 +63,10 @@ const populatePasswordField = (sut: RenderResult, password = faker.internet.pass
   fireEvent.input(passwordInput, { target: { value: password } })
 }
 
-const testStatusForField = (sut: RenderResult, fieldName: string, validationError?: string): void => {
-  const { getByTestId } = sut
-  const fieldStatus = getByTestId(`${fieldName}-status`)
-  expect(fieldStatus.title).toBe(validationError || 'Tudo certo!')
-  testElementText(sut, `${fieldName}-status`, validationError ? '🔴' : '🟢')
-}
-
-const testErrorWrapperChildCount = (sut: RenderResult, count: number): void => {
-  const { getByTestId } = sut
-  const errorWrap = getByTestId('error-wrap')
-  expect(errorWrap.childElementCount).toBe(count)
-}
-
 const testElementExists = (sut: RenderResult, fieldName: string): void => {
   const { getByTestId } = sut
   const element = getByTestId(fieldName)
   expect(element).toBeTruthy()
-}
-
-const testElementText = (sut: RenderResult, fieldName: string, text: string): void => {
-  const { getByTestId } = sut
-  const element = getByTestId(fieldName)
-  expect(element.textContent).toBe(text)
-}
-
-const testButtonIsDisabled = (sut: RenderResult, fieldName: string, isDisabled: boolean): void => {
-  const { getByTestId } = sut
-  const button = getByTestId(fieldName) as HTMLButtonElement
-  expect(button.disabled).toBe(isDisabled)
 }
 
 describe('Login Component', () => {
@@ -101,7 +76,7 @@ describe('Login Component', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
 
-    testErrorWrapperChildCount(sut, 0)
+    testChildCount(sut, 'error-wrap', 0)
     testButtonIsDisabled(sut, 'submit', true)
     testStatusForField(sut, 'email', validationError)
     testStatusForField(sut, 'password', validationError)
@@ -176,7 +151,7 @@ describe('Login Component', () => {
     await simulateValidSubmit(sut)
 
     testElementText(sut, 'main-error', error.message)
-    testErrorWrapperChildCount(sut, 1)
+    testChildCount(sut, 'error-wrap', 1)
   })
 
   test('Should call SaveAccessToken on success', async () => {
@@ -193,7 +168,7 @@ describe('Login Component', () => {
     jest.spyOn(saveAccessTokenMock, 'save').mockReturnValueOnce(Promise.reject(error))
     await simulateValidSubmit(sut)
     testElementText(sut, 'main-error', error.message)
-    testErrorWrapperChildCount(sut, 1)
+    testChildCount(sut, 'error-wrap', 1)
   })
 
   test('Should go to signup page', () => {
