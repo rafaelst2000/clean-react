@@ -1,6 +1,4 @@
-import React, { useContext } from 'react'
-import Styles from './input-styles.scss'
-
+import React from 'react'
 interface Props extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   text: string
   disabled?: boolean
@@ -8,7 +6,7 @@ interface Props extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLB
 
 const SubmitButton: React.FC<Props> = ({ text, disabled = false, ...props }: Props) => {
   return (
-    <button data-testid="submit" disabled={disabled} className={Styles.submit} type="submit" {...props}>{text}</button>
+    <button data-testid="submit" disabled={disabled} type="submit" {...props}>{text}</button>
   )
 }
 
