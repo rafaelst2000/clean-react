@@ -24,3 +24,13 @@ input[type="email"] {
     outline-color: $primaryLight;
   }
 }
+
+button {
+  &:disabled {
+    background-color: $disabledBackground;
+    color: $disabledColor;
+  &:hover {
+    opacity: 1;
+  }
+}
+}
