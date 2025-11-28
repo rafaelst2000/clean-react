@@ -4,10 +4,10 @@ import { FieldValiation } from '@/validation/protocols'
 export class EmailValidation implements FieldValiation {
   constructor (readonly field: string) {}
 
-  validate (value: string): Error {
-    if (!value) return null
+  validate (input: object): Error {
+    if (!input[this.field]) return null
 
     const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-    return emailRegex.test(value) ? null : new InvalidFieldError()
+    return emailRegex.test(input[this.field]) ? null : new InvalidFieldError()
   }
 }
