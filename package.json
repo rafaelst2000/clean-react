@@ -9,6 +9,7 @@
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
+    "test:cypress": "cypress open",
     "prepare": "husky",
     "check": "npm-check -u -s",
     "lint": "eslint src/**",
