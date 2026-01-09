@@ -82,8 +82,8 @@ describe('Login', () => {
 
     cy.getByTestId('password').focus()
     cy.getByTestId('password').type(faker.random.alphaNumeric(5))
+    cy.getByTestId('password').type('{enter}')
 
-    cy.getByTestId('submit').click()
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('main-error').should('contain.text', 'Algo de errado aconteceu. Tente novamente em breve.')
 
