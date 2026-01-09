@@ -8,8 +8,14 @@ describe('Login', () => {
   })
 
   it('Should load with correct initial state', () => {
-    cy.getByTestId('email-status').should('have.attr', 'title', 'Campo obrigatório').should('contain.text', '🔴')
-    cy.getByTestId('password-status').should('have.attr', 'title', 'Campo obrigatório').should('contain.text', '🔴')
+    cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'invalid')
+    cy.getByTestId('email').should('have.attr', 'title', 'Campo obrigatório')
+    cy.getByTestId('email-label').should('have.attr', 'title', 'Campo obrigatório')
+
+    cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'invalid')
+    cy.getByTestId('password').should('have.attr', 'title', 'Campo obrigatório')
+    cy.getByTestId('password-label').should('have.attr', 'title', 'Campo obrigatório')
+
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
@@ -21,8 +27,11 @@ describe('Login', () => {
     cy.getByTestId('password').focus()
     cy.getByTestId('password').type(faker.random.alphaNumeric(4))
 
-    cy.getByTestId('email-status').should('have.attr', 'title', 'Campo inválido').should('contain.text', '🔴')
-    cy.getByTestId('password-status').should('have.attr', 'title', 'Campo inválido').should('contain.text', '🔴')
+    cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'invalid')
+    cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'invalid')
+
+    cy.getByTestId('email-label').should('have.attr', 'title', 'Campo inválido')
+    cy.getByTestId('password-label').should('have.attr', 'title', 'Campo inválido')
 
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
@@ -35,8 +44,11 @@ describe('Login', () => {
     cy.getByTestId('password').focus()
     cy.getByTestId('password').type(faker.random.alphaNumeric(5))
 
-    cy.getByTestId('email-status').should('have.attr', 'title', 'Tudo certo!').should('contain.text', '🟢')
-    cy.getByTestId('password-status').should('have.attr', 'title', 'Tudo certo!').should('contain.text', '🟢')
+    cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'valid')
+    cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'valid')
+
+    cy.getByTestId('email-label').should('not.have.attr', 'title')
+    cy.getByTestId('password-label').should('not.have.attr', 'title')
 
     cy.getByTestId('submit').should('not.have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
