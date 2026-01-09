@@ -115,7 +115,7 @@ describe('Login', () => {
     cy.window().then(window => assert.isOk(window.localStorage.getItem('accessToken')))
   })
 
-  it.only('Should prevent multiple submits', () => {
+  it('Should prevent multiple submits', () => {
     cy.intercept({
       method: 'POST',
       url: /login/
