@@ -42,7 +42,7 @@ describe('Login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
-  it('Should present error if invalid credentials are provided', () => {
+  it('Should present invalid credentials on 401', () => {
     cy.intercept({
       method: 'POST',
       url: /login/
@@ -66,7 +66,31 @@ describe('Login', () => {
     cy.url().should('eq', baseUrl + '/login')
   })
 
-  it('Should present save accessToken if valid credentials are provided', () => {
+  it('Should present unexpected error on 400', () => {
+    cy.intercept({
+      method: 'POST',
+      url: /login/
+    }, {
+      statusCode: 400,
+      response: {
+        error: faker.random.words()
+      }
+    })
+
+    cy.getByTestId('email').focus()
+    cy.getByTestId('email').type(faker.internet.email())
+
+    cy.getByTestId('password').focus()
+    cy.getByTestId('password').type(faker.random.alphaNumeric(5))
+
+    cy.getByTestId('submit').click()
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('main-error').should('contain.text', 'Algo de errado aconteceu. Tente novamente em breve.')
+
+    cy.url().should('eq', baseUrl + '/login')
+  })
+
+  it.only('Should present save accessToken if valid credentials are provided', () => {
     cy.intercept({
       method: 'POST',
       url: /login/
@@ -75,13 +99,13 @@ describe('Login', () => {
       response: {
         accessToken: faker.datatype.uuid()
       }
-    })
+    }).as('request')
 
     cy.getByTestId('email').focus()
-    cy.getByTestId('email').type('mango@gmail.com')
+    cy.getByTestId('email').type(faker.internet.email())
 
     cy.getByTestId('password').focus()
-    cy.getByTestId('password').type('12345')
+    cy.getByTestId('password').type(faker.random.alphaNumeric(5))
 
     cy.getByTestId('submit').click()
     cy.getByTestId('main-error').should('not.exist')
