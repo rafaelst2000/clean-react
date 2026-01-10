@@ -1,6 +1,6 @@
 import faker from 'faker'
 import { localStorageItem, simulateValidSubmit, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
-import { mockInvalidCredentialsError, mockOk, mockUnexpectedError } from './login-mocks'
+import { mockInvalidCredentialsError, mockOk, mockUnexpectedError } from '../support/login-mocks'
 
 describe('Login', () => {
   beforeEach(() => {
