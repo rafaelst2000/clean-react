@@ -17,33 +17,51 @@ describe('Signup', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
-  // it('Should present error state if form is invalid', () => {
-  //   cy.getByTestId('email').focus()
-  //   cy.getByTestId('email').type(faker.random.word())
+  it('Should present error state if form is invalid', () => {
+    cy.getByTestId('name').focus()
+    cy.getByTestId('name').type(faker.random.alphaNumeric(4))
 
-  //   cy.getByTestId('password').focus()
-  //   cy.getByTestId('password').type(faker.random.alphaNumeric(4))
+    cy.getByTestId('email').focus()
+    cy.getByTestId('email').type(faker.random.word())
 
-  //   testInputStatus('email', 'Campo inválido')
-  //   testInputStatus('password', 'Campo inválido')
+    cy.getByTestId('password').focus()
+    cy.getByTestId('password').type(faker.random.alphaNumeric(4))
 
-  //   cy.getByTestId('submit').should('have.attr', 'disabled')
-  //   cy.getByTestId('error-wrap').should('not.have.descendants')
-  // })
+    cy.getByTestId('passwordConfirmation').focus()
+    cy.getByTestId('passwordConfirmation').type(faker.random.alphaNumeric(4))
 
-  // it('Should present valid state if form is valid', () => {
-  //   cy.getByTestId('email').focus()
-  //   cy.getByTestId('email').type(faker.internet.email())
+    testInputStatus('name', 'Campo inválido')
+    testInputStatus('email', 'Campo inválido')
+    testInputStatus('password', 'Campo inválido')
+    testInputStatus('passwordConfirmation', 'Campo inválido')
 
-  //   cy.getByTestId('password').focus()
-  //   cy.getByTestId('password').type(faker.random.alphaNumeric(5))
+    cy.getByTestId('submit').should('have.attr', 'disabled')
+    cy.getByTestId('error-wrap').should('not.have.descendants')
+  })
 
-  //   testInputStatus('email')
-  //   testInputStatus('password')
+  it('Should present valid state if form is valid', () => {
+    const password = faker.random.alphaNumeric(5)
 
-  //   cy.getByTestId('submit').should('not.have.attr', 'disabled')
-  //   cy.getByTestId('error-wrap').should('not.have.descendants')
-  // })
+    cy.getByTestId('name').focus()
+    cy.getByTestId('name').type(faker.name.findName())
+
+    cy.getByTestId('email').focus()
+    cy.getByTestId('email').type(faker.internet.email())
+
+    cy.getByTestId('password').focus()
+    cy.getByTestId('password').type(password)
+
+    cy.getByTestId('passwordConfirmation').focus()
+    cy.getByTestId('passwordConfirmation').type(password)
+
+    testInputStatus('name')
+    testInputStatus('email')
+    testInputStatus('password')
+    testInputStatus('passwordConfirmation')
+
+    cy.getByTestId('submit').should('not.have.attr', 'disabled')
+    cy.getByTestId('error-wrap').should('not.have.descendants')
+  })
 
   // it('Should present invalid credentials on 401', () => {
   //   mockInvalidCredentialsError()
