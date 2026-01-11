@@ -1,7 +1,6 @@
 import faker from 'faker'
 import { localStorageItem, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
-import { mockInvalidCredentialsError, mockOk, mockUnexpectedError } from '../support/login-mocks'
-import { mockEmailInUseError } from '../support/signup-mocks'
+import { mockEmailInUseError, mockUnexpectedError } from '../support/signup-mocks'
 
 const simulateValidSubmit = (): void => {
   const password = faker.random.alphaNumeric(5)
@@ -90,13 +89,13 @@ describe('Signup', () => {
     testUrl('/signup')
   })
 
-  // it('Should present unexpected error on 400', () => {
-  //   mockUnexpectedError()
-  //   simulateValidSubmit()
-  //   testMainError('Algo de errado aconteceu. Tente novamente em breve.')
+  it.only('Should present UnexpectedRrror on 400', () => {
+    mockUnexpectedError()
+    simulateValidSubmit()
+    testMainError('Algo de errado aconteceu. Tente novamente em breve.')
 
-  //   testUrl('/login')
-  // })
+    testUrl('/signup')
+  })
 
   // it('Should present save accessToken if valid credentials are provided', () => {
   //   mockOk()
