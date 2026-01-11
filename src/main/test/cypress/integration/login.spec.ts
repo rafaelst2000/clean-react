@@ -2,13 +2,16 @@ import faker from 'faker'
 import { localStorageItem, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
 import { mockInvalidCredentialsError, mockOk, mockUnexpectedError } from '../support/login-mocks'
 
-const simulateValidSubmit = (): void => {
+const fillValidFields = (): void => {
   cy.getByTestId('email').focus()
   cy.getByTestId('email').type(faker.internet.email())
 
   cy.getByTestId('password').focus()
   cy.getByTestId('password').type(faker.random.alphaNumeric(5))
+}
 
+const simulateValidSubmit = (): void => {
+  fillValidFields()
   cy.getByTestId('submit').click()
 }
 
@@ -82,12 +85,7 @@ describe('Login', () => {
 
   it('Should prevent multiple submits', () => {
     mockOk()
-
-    cy.getByTestId('email').focus()
-    cy.getByTestId('email').type(faker.internet.email())
-
-    cy.getByTestId('password').focus()
-    cy.getByTestId('password').type(faker.random.alphaNumeric(5))
+    fillValidFields()
 
     cy.getByTestId('submit').dblclick()
     cy.wait('@request')
