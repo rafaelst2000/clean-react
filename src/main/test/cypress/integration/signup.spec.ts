@@ -121,13 +121,13 @@ describe('Signup', () => {
     testHttpCallsCount(1)
   })
 
-  // it('Should not call submit if form is invalid', () => {
-  //   mockOk()
+  it('Should not call submit if form is invalid', () => {
+    mockOk()
 
-  //   cy.getByTestId('email').focus()
-  //   cy.getByTestId('email').type(faker.internet.email())
-  //   cy.getByTestId('email').type('{enter}')
+    cy.getByTestId('email').focus()
+    cy.getByTestId('email').type(faker.internet.email())
+    cy.getByTestId('email').type('{enter}')
 
-  //   testHttpCallsCount(0)
-  // })
+    testHttpCallsCount(0)
+  })
 })
