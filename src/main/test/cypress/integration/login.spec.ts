@@ -1,6 +1,16 @@
 import faker from 'faker'
-import { localStorageItem, simulateValidSubmit, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
+import { localStorageItem, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
 import { mockInvalidCredentialsError, mockOk, mockUnexpectedError } from '../support/login-mocks'
+
+const simulateValidSubmit = (): void => {
+  cy.getByTestId('email').focus()
+  cy.getByTestId('email').type(faker.internet.email())
+
+  cy.getByTestId('password').focus()
+  cy.getByTestId('password').type(faker.random.alphaNumeric(5))
+
+  cy.getByTestId('submit').click()
+}
 
 describe('Login', () => {
   beforeEach(() => {

@@ -19,16 +19,6 @@ export const testHttpCallsCount = (count: number): void => {
   cy.get('@request.all').should('have.length', count)
 }
 
-export const simulateValidSubmit = (): void => {
-  cy.getByTestId('email').focus()
-  cy.getByTestId('email').type(faker.internet.email())
-
-  cy.getByTestId('password').focus()
-  cy.getByTestId('password').type(faker.random.alphaNumeric(5))
-
-  cy.getByTestId('submit').click()
-}
-
 export const testUrl = (path: string): void => {
   cy.url().should('eq', baseUrl + path)
 }

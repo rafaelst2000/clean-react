@@ -3,7 +3,7 @@ import faker from 'faker'
 export const mockInvalidCredentialsError = (url: RegExp): void => {
   cy.intercept({
     method: 'POST',
-    url: /login/
+    url
   }, {
     statusCode: 401,
     body: {
@@ -31,5 +31,17 @@ export const mockOk = (url: RegExp, method: string, response: any): void => {
   }, {
     statusCode: 200,
     body: response
+  }).as('request')
+}
+
+export const mockEmailInUseError = (url: RegExp): void => {
+  cy.intercept({
+    method: 'POST',
+    url
+  }, {
+    statusCode: 403,
+    body: {
+      error: faker.random.words()
+    }
   }).as('request')
 }

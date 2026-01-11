@@ -1,6 +1,25 @@
 import faker from 'faker'
-import { localStorageItem, simulateValidSubmit, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
+import { localStorageItem, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
 import { mockInvalidCredentialsError, mockOk, mockUnexpectedError } from '../support/login-mocks'
+import { mockEmailInUseError } from '../support/signup-mocks'
+
+const simulateValidSubmit = (): void => {
+  const password = faker.random.alphaNumeric(5)
+
+  cy.getByTestId('name').focus()
+  cy.getByTestId('name').type(faker.name.findName())
+
+  cy.getByTestId('email').focus()
+  cy.getByTestId('email').type(faker.internet.email())
+
+  cy.getByTestId('password').focus()
+  cy.getByTestId('password').type(password)
+
+  cy.getByTestId('passwordConfirmation').focus()
+  cy.getByTestId('passwordConfirmation').type(password)
+
+  cy.getByTestId('submit').click()
+}
 
 describe('Signup', () => {
   beforeEach(() => {
@@ -63,13 +82,13 @@ describe('Signup', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
-  // it('Should present invalid credentials on 401', () => {
-  //   mockInvalidCredentialsError()
-  //   simulateValidSubmit()
-  //   testMainError('Credenciais inválidas')
+  it('Should present EmailInUseError on 403', () => {
+    mockEmailInUseError()
+    simulateValidSubmit()
+    testMainError('Esse e-mail já está em uso.')
 
-  //   testUrl('/login')
-  // })
+    testUrl('/signup')
+  })
 
   // it('Should present unexpected error on 400', () => {
   //   mockUnexpectedError()
