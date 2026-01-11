@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, RenderResult } from '@testing-library/react'
+import { fireEvent, render, RenderResult } from '@testing-library/react'
 import faker from 'faker'
 import Input from './input'
 import Context from '@/presentation/contexts/form/form-context'
@@ -26,5 +26,14 @@ describe('Input', () => {
     const input = getByTestId(fieldName) as HTMLInputElement
     input.focus()
     expect(input.readOnly).toBe(false)
+  })
+
+  test('Should focus input on label click', () => {
+    const fieldName = faker.random.word()
+    const { getByTestId } = makeSut(fieldName)
+    const input = getByTestId(fieldName)
+    const label = getByTestId(`${fieldName}-label`)
+    fireEvent.click(label)
+    expect(document.activeElement).toBe(input)
   })
 })
