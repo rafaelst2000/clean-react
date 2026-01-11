@@ -1,6 +1,6 @@
 import faker from 'faker'
 import { localStorageItem, testHttpCallsCount, testInputStatus, testMainError, testUrl } from '../support/form-helper'
-import { mockEmailInUseError, mockUnexpectedError } from '../support/signup-mocks'
+import { mockEmailInUseError, mockUnexpectedError, mockOk } from '../support/signup-mocks'
 
 const simulateValidSubmit = (): void => {
   const password = faker.random.alphaNumeric(5)
@@ -89,7 +89,7 @@ describe('Signup', () => {
     testUrl('/signup')
   })
 
-  it.only('Should present UnexpectedRrror on 400', () => {
+  it('Should present UnexpectedRrror on 400', () => {
     mockUnexpectedError()
     simulateValidSubmit()
     testMainError('Algo de errado aconteceu. Tente novamente em breve.')
@@ -97,16 +97,16 @@ describe('Signup', () => {
     testUrl('/signup')
   })
 
-  // it('Should present save accessToken if valid credentials are provided', () => {
-  //   mockOk()
-  //   simulateValidSubmit()
+  it('Should present save accessToken if valid credentials are provided', () => {
+    mockOk()
+    simulateValidSubmit()
 
-  //   cy.getByTestId('main-error').should('not.exist')
-  //   cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('main-error').should('not.exist')
+    cy.getByTestId('spinner').should('not.exist')
 
-  //   testUrl('/')
-  //   localStorageItem('accessToken')
-  // })
+    testUrl('/')
+    localStorageItem('accessToken')
+  })
 
   // it('Should prevent multiple submits', () => {
   //   mockOk()
