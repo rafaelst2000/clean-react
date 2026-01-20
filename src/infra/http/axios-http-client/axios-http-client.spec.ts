@@ -64,12 +64,12 @@ describe('AxiosHttpGetClient', () => {
     })
   })
 
-  // test('Should return the correct status code and body on failure', () => {
-  //   const { sut, mockedAxios } = makeSut()
-  //   mockedAxios.post.mockRejectedValueOnce({
-  //     response: mockHttpResponse()
-  //   })
-  //   const promise = sut.post(mockPostRequest())
-  //   expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
-  // })
+  test('Should return the correct status code and body on failure', () => {
+    const { sut, mockedAxios } = makeSut()
+    mockedAxios.get.mockRejectedValueOnce({
+      response: mockHttpResponse()
+    })
+    const promise = sut.get(mockGetRequest())
+    expect(promise).toEqual(mockedAxios.get.mock.results[0].value)
+  })
 })
